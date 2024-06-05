@@ -1,21 +1,26 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+
 
 function App() {
 
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
     async function getTodos() {
-      const res = await fetch("http://localhost:2000/api/todos");
+      const res = await fetch("/api/todos");
       const todos = await res.json();
 
-      console.log(todos)
+      setMessage(todos.mssg);
     }
     getTodos()
+
   },[]) 
 
 
   return (
     <main className="container">
       <h1>Awsesome Todos</h1>
+      {message && <p>{message}</p>}
     </main>
   );
 }

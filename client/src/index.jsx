@@ -4,6 +4,7 @@ import './styles.css';
 import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+// React.StrictMode causes the program to run twice
 root.render(
   <React.StrictMode>
     <App />
