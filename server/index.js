@@ -5,9 +5,10 @@ const { connectToMongoDB } = require("./database");
 const app = express();
 const router = require('./routes');
 app.use("/api", router);
+app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.status(200).json({msg: "hello peoples"});
+  res.status(200).json({msg: "hello world"});
 });
 
 const port = process.env.PORT || 4000;
