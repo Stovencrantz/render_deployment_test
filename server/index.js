@@ -4,8 +4,9 @@ const { connectToMongoDB } = require("./database");
 
 const app = express();
 const router = require('./routes');
+app.use(express.json()); //Needs to be called before app.use("/api", router) otherwise attempting to read json body will still show as undefined. 
 app.use("/api", router);
-app.use(express.json());
+
 
 app.get("/", (req, res) => {
   res.status(200).json({msg: "hello world"});

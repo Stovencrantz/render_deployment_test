@@ -12,6 +12,7 @@ const getCollection = () => {
 // GET /todos
 router.get("/todos", async (req, res) => {
   const collection = getCollection();
+  console.log(req.body);
   const todos = await collection.find({}).toArray();
 
   // res.status(200).json({ mssg: "GET REQUEST TO /api/todos" });
@@ -21,13 +22,12 @@ router.get("/todos", async (req, res) => {
 // POST /todos
 router.post("/todos", async (req, res) => {
   const collection = getCollection();
-  //const { todo } = req.body;
+  const { todo } = req.body;
 
-  console.log(req.body);
+  const newTodo = await collection.insertOne({ todo, status:false })
 
-  //const newTodo = await collection.insertOne({ todo, status:false })
-
-  res.status(201).json({ mssg: "POST REQUEST TO /api/todos" });
+  // res.status(201).json({ mssg: "POST REQUEST TO /api/todos" });
+  res.status(201).json({ todo, status: false, _id: newTodo.insertId });
 });
 
 // DELETE /todos/:id
