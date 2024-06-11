@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { getConnectedClient } = require("./database");
+const { ObjectId } = require("mongodb");
 
 const getCollection = () => {
   const client = getConnectedClient();
@@ -31,8 +32,13 @@ router.post("/todos", async (req, res) => {
 });
 
 // DELETE /todos/:id
-router.delete("/todos/:id", (req, res) => { 
-  res.status(200).json({ mssg: "DELETE REQUEST TO /api/todos/:id" });
+router.delete("/todos/:id", async (req, res) => { 
+  const collection = getCollection();
+  const _id = new ObjectId(req.params.id);
+  const deletedTodo = await collection.deleteOne({ _id });
+
+  // res.status(200).json({ mssg: "DELETE REQUEST TO /api/todos/:id" });
+  res.status(200).json({deletedTodo});
 });
 
 // PUT  /todos/:id
