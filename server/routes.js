@@ -42,8 +42,15 @@ router.delete("/todos/:id", async (req, res) => {
 });
 
 // PUT  /todos/:id
-router.put("/todos/:id", (req, res) => { 
-  res.status(200).json({ mssg: "PUT REQUEST TO /api/todos/:id" });
+router.put("/todos/:id", async (req, res) => { 
+  const collection = getCollection();
+  const _id = new ObjectId(req.params.id);
+  const {status} = req.body;
+
+  const updateTodo = await collection.updateOne({ _id }, {$set: {status: !status}});
+
+  // res.status(200).json({ mssg: "PUT REQUEST TO /api/todos/:id" });
+  res.status(200).json(updateTodo);
 });
 
 module.exports = router;
