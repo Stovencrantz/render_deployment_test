@@ -3,8 +3,8 @@ require("dotenv").config();
 const { connectToMongoDB } = require("./database");
 
 const app = express();
-const router = require('./routes');
 app.use(express.json()); //Needs to be called before app.use("/api", router) otherwise attempting to read json body will still show as undefined. 
+const router = require('./routes');
 app.use("/api", router);
 
 
@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
   res.status(200).json({msg: "hello world"});
 });
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 2000;
 
 async function startServer() {
   await connectToMongoDB();
