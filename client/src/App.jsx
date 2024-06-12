@@ -1,26 +1,56 @@
-import {useEffect, useState} from "react";
-
+import { useEffect, useState } from "react";
+import Todo from "./Todo";
 
 function App() {
-
-  const [message, setMessage] = useState("");
+  const [todos, setTodos] = useState([]);
+  const [content, setContent] = useState([]);
 
   useEffect(() => {
     async function getTodos() {
       const res = await fetch("/api/todos");
       const todos = await res.json();
 
-      setMessage(todos.mssg);
+      setTodos(todos);
     }
-    getTodos()
+    getTodos();
+  }, []);
 
-  },[]) 
+  const createNewTodo = async (e) => {
+    e.preventDefault();
+    if (content.length > 3) {
+      const res = await fetch("/api/todos", {
+        method: "POST",
+        body: JSON.stringify({ todo: content }),
+        headers: {
+          "Content-Type": "application/json"
+        },
+      });
+      const newTodo = await res.json();
 
+      setContent("");
+      setTodos([...todos, newTodo]);
+    }
+  }
 
   return (
     <main className="container">
-      <h1>Awsesome Todos</h1>
-      {message && <p>{message}</p>}
+      <h1 className="title">Awsesome Todos</h1>
+      <form className="form" onSubmit={createNewTodo}>
+        <input type="text"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        className="form__input"
+        placeholder="Enter a new todo..."
+        required 
+        />
+        <button type="submit">Create Todo</button>
+      </form>
+      <div className="todos">
+        {todos.length > 0 &&
+          todos.map((todo) => (
+            <Todo key={todo._id} todo={todo} setTodos={setTodos}/>
+          ))}
+      </div>
     </main>
   );
 }
