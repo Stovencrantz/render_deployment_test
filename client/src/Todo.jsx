@@ -1,6 +1,6 @@
 export default function Todo(props) {
 
-  const {todo, setTodo} = props;
+  const {todo, setTodos} = props;
 
   const updateTodo = async (todoId, todoStatus) => {
     const res = await fetch(`/api/todos/${todoId}`,{
@@ -10,7 +10,7 @@ export default function Todo(props) {
         "Content-Type": "application/json"
       },
     })
-    
+
     const json = await res.json();
     if (json.acknowledged) {
       setTodos(currentTodos => {
@@ -24,6 +24,18 @@ export default function Todo(props) {
     }
   }
 
+  const deleteTodo = async (todoId) => {
+    const res = await fetch(`/api/todos/${todoId}`, {
+        method: "DELETE"
+    });
+    const json = await res.json();
+    if (json.acknowledged) {
+        setTodos(currentTodos => {
+            return currentTodos
+            .filter((currentTodo) => (currentTodo._id !== todoId));
+        })
+    }
+};
 
   return (
     <div className="todo">
@@ -32,6 +44,11 @@ export default function Todo(props) {
       <button className="todo__status"
       onClick={() => updateTodo(todo._id, todo.status)}>
         {todo.status ? "☑️" : "☐"}
+      </button>
+      <button
+        className = "todo__delete"
+        onClick={() => deleteTodo(todo._id)}>
+          🗑️
       </button>
     </div>
   </div>
